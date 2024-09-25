@@ -1,9 +1,7 @@
 import multiprocessing
-import requests
 import time
-import cProfile
 
-prime_pos = []
+
 
 def is_primes(n):
     global prime_pos
@@ -13,23 +11,18 @@ def is_primes(n):
         if primes[numbers]:
             for mult in range(numbers*numbers, n+1, numbers):
                 primes[mult] = False
-    prime_pos = primes
+    return primes
 
-def find_primes(chunk):
-    for x in chunk:
-        print(x)
-        input()
-
+def find_primes(chunk, prime_pos):
+    return [x for x in chunk if prime_pos[x]]
     
     
 
 def find_primes_in_range(numbers):
     maxs = max(numbers)
-    is_primes(maxs)
+    prime_pos = is_primes(maxs)
     chunksize = len(numbers)//multiprocessing.cpu_count()
     chunks  = [numbers[i:i+chunksize] for i in range(0, len(numbers), chunksize)]
-    print(len(prime_pos),maxs)
-    input()
     with multiprocessing.Pool() as pool:
-        results = pool.map(find_primes, chunks)
-        return results
+        results = pool.starmap(find_primes,[ (chunk, prime_pos) for chunk in chunks])
+        return [prime for sublist in results for prime in sublist]
