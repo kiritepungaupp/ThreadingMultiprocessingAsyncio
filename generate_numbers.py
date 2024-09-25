@@ -9,4 +9,4 @@ def generate_numbers_file(filename, num_numbers, min_value, max_value):
     print(f"File '{filename}' with {num_numbers} random numbers generated.")
 
 
-generate_numbers_file('numbers.txt',200,12312,123561235123)
+generate_numbers_file('numbers.txt',200,1231223456342,12312234563523)
